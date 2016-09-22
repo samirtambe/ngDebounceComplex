@@ -6,14 +6,23 @@ app.directive('resize', function($window) {
     return {
         link: function(scope) {
 
+            var timeout=false, delay=650;
+
             function onResize(e) {
-                console.log('onresize called.');
-// Namespacing events with name of directive + event to avoid collisions
-                scope.$broadcast('resize::resize');
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(sendBroadcast, delay);
+
+                function sendBroadcast() {
+
+                    scope.$broadcast('resize::resize');
+
+                }
             }
 
             function cleanUp() {
-                console.log('cleanup called...now calling onResize');
+                console.log('cleanup called...');
                 angular.element($window).off('resize', onResize);
             }
 
@@ -30,7 +39,7 @@ app.directive('elasticDiv', function() {
         template: '<div></div>',
         link: function(scope, element) {
             scope.$on('resize::resize', function() {
-                console.log('Hearing a resize::resize...'+'co_nt');
+                console.log('Receiving broadcast signal- resize::resize...');
             });
         }
     };
