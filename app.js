@@ -1,35 +1,37 @@
 'use strict';
 
-var app = angular.module('AngDbcng', []);
+var app = angular.module('ngDebounceBetter', []);
 
-app.directive('disp', ['$window', function ($window) {
+angular.module('ngDebounceBetter').directive('resize', function($window) {
     return {
-        link: link,
-        restrict: 'E',
-        template: '<div>window size: {{width}}px</div>'
-    };
+        link: function(scope) {
 
-    function link(scope, element, attrs){
-        scope.width = $window.innerWidth;
-        var timeout=false, delay=650;
-        angular.element($window).bind('resize', function() {
-            scope.width = $window.innerWidth;
-            clearTimeout(timeout);
-// start timing for event "completion"
-            timeout = setTimeout(someFunc, delay);
-
-            function someFunc() {
-// manuall $digest required as resize event
-// is outside of angular
-                scope.$digest();
-                /*
-                Put what you want to happen once the window is finished resizing
-                HERE
-
-                */
+            function onResize(e) {
+                console.log('onresize called.\n\n');
+// Namespacing events with name of directive + event to avoid collisions
+                scope.$broadcast('resize::resize');
             }
-        });
 
-     }//link function
+            function cleanUp() {
+                console.log('cleanup called...now calling onResize');
+                angular.element($window).off('resize', onResize);
+            }
 
- }]);
+            angular.element($window).on('resize', onResize);
+
+            scope.$on('$destroy', cleanUp);
+        }
+    }
+});
+
+angular.module('ngDebounceBetter').directive('elasticDiv', function() {
+    return {
+        restrict: 'E',
+        template: '<div></div>',
+        link: function(scope, element) {
+            scope.$on('resize::resize', function() {
+                console.log('Hearing a resize::resize...'+count+'\n\n');
+            });
+        }
+    };
+});
