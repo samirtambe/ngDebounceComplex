@@ -2,12 +2,12 @@
 
 var app = angular.module('ngDebounceBetter', []);
 
-angular.module('ngDebounceBetter').directive('resize', function($window) {
+app.directive('resize', function($window) {
     return {
         link: function(scope) {
 
             function onResize(e) {
-                console.log('onresize called.\n\n');
+                console.log('onresize called.');
 // Namespacing events with name of directive + event to avoid collisions
                 scope.$broadcast('resize::resize');
             }
@@ -24,13 +24,13 @@ angular.module('ngDebounceBetter').directive('resize', function($window) {
     }
 });
 
-angular.module('ngDebounceBetter').directive('elasticDiv', function() {
+app.directive('elasticDiv', function() {
     return {
         restrict: 'E',
         template: '<div></div>',
         link: function(scope, element) {
             scope.$on('resize::resize', function() {
-                console.log('Hearing a resize::resize...'+count+'\n\n');
+                console.log('Hearing a resize::resize...'+'co_nt');
             });
         }
     };
