@@ -39,7 +39,7 @@ app.directive('elasticDiv', function() {
         //template: '<div></div>',
         link: function(scope, element) {
             scope.$on('resize:-:resize', function() {
-                console.log('Receiving broadcast signal- resize::resize...');
+                console.log('Receiving broadcast signal- resize:-:resize...');
             });
         }
     };
